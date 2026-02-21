@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Laporan Keuangan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #ffffff;
+    margin: 0;
+    padding: 20px;
+    color: #6b7280;
+    display: flex;
+    justify-content: center;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .container {
+    max-width: 900px;
+    background: white;
+    border-radius: 12px;
+    padding: 40px 48px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    width: 100%;
+    transition: background-color 0.3s;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 48px;
+    color: #111827;
+    font-weight: 800;
+    font-size: 3rem;
+    line-height: 1.1;
+  }
+
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+    font-size: 1rem;
+  }
+
+  input[type=text],
+  input[type=number],
+  input[type=date],
+  select {
+    padding: 12px 16px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.25s ease;
+    color: #111827;
+    background: #f9fafb;
+  }
+
+  input[type=text]:focus,
+  input[type=number]:focus,
+  input[type=date]:focus,
+  select:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: white;
+  }
+
+  .form-item {
+    flex: 1 1 180px;
+    min-width: 160px;
+  }
+
+  button {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 16px 28px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.125rem;
+    flex: 1 1 100%;
+    transition: background-color 0.3s ease;
+    filter: drop-shadow(0 2px 5px rgba(37, 99, 235, 0.35));
+  }
+
+  button:hover {
+    background-color: #1e40af;
+  }
+
+  .summary {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .summary-item {
+    background: #f3f4f6;
+    flex: 1 1 0;
+    border-radius: 12px;
+    padding: 24px 28px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  .summary-item h3 {
+    margin: 0 0 12px 0;
+    font-weight: 700;
+    color: #2563eb;
+    font-size: 1.25rem;
+  }
+
+  .summary-item p {
+    font-size: 1.875rem;
+    margin: 0;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .income {
+    color: #16a34a;
+  }
+
+  .expense {
+    color: #dc2626;
+  }
+
+  .balance {
+    color: #2563eb;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.08);
+  }
+
+  thead {
+    background-color: transparent;
+  }
+
+  th, td {
+    padding: 14px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #4b5563; /* Warna default untuk teks tabel */
+  }
+
+  tbody tr {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: box-shadow 0.25s ease;
+  }
+
+  tbody tr:hover {
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  }
+
+  td {
+    font-weight: 500;
+    color: #374151; /* Warna default untuk teks tabel */
+  }
+
+  .type-income {
+    color: #16a34a;
+    font-weight: 700;
+  }
+
+  .type-expense {
+    color: #dc2626;
+    font-weight: 700;
+  }
+
+  .delete-btn {
+    background-color: transparent;
+    border: none;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 1.125rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .delete-btn:hover {
+    color: #9b1c1c;
+  }
+
+  .dark-mode {
+    background-color: #1f2937; /* Warna latar belakang gelap */
+    color: white; /* Warna teks putih */
+  }
+
+  .dark-mode .container {
+    background: #374151; /* Warna kontainer gelap */
+  }
+
+  .dark-mode label,
+  .dark-mode h1 {
+    color: white; /* Warna teks putih untuk elemen tertentu */
+  }
+
+  .dark-mode th,
+  .dark-mode td {
+    color: #4b5563; /* Tetap warna default untuk teks tabel */
+  }
+
+  .dark-mode th {
+    color: white; /* Warna header tabel putih dalam mode gelap */
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 10px; /* Mengurangi padding untuk layar kecil */
+    }
+
+    h1 {
+      font-size: 2rem; /* Mengurangi ukuran font judul */
+    }
+
+    .container {
+      padding: 20px; /* Mengurangi padding dalam kontainer */
+    }
+
+    .form-item {
+      flex: 1 1 100%; /* Membuat form item mengambil lebar penuh */
+    }
+
+    button {
+      padding: 12px; /* Mengurangi padding tombol */
+      font-size: 1rem; /* Mengurangi ukuran font tombol */
+    }
+
+    .summary {
+      flex-direction: column; /* Mengatur summary menjadi kolom */
+      align-items: center; /* Menyelaraskan item di tengah */
+    }
+
+    .summary-item {
+      width: 100%; /* Membuat summary item mengambil lebar penuh */
+      margin-bottom: 16px; /* Menambahkan margin bawah */
+    }
+
+    table {
+      font-size: 0.9rem; /* Mengurangi ukuran font tabel */
+    }
+
+    th, td {
+      padding: 10px; /* Mengurangi padding dalam tabel */
+    }
+  }
+
+  .toggle-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #2563eb;
+    transition: color 0.3s;
+  }
+
+  .dark-mode .toggle-button {
+    color: white; /* Warna ikon dalam mode gelap */
+  }
+</style>
+</head>
+<body>
+  <button class="toggle-button" id="toggle-mode" aria-label="Toggle dark mode">
+    🌙
+  </button>
+  <div class="container" role="main">
+    <h1>Laporan Keuangan</h1>
+    <form id="transaction-form" aria-label="Form laporan transaksi keuangan">
+      <div class="form-item">
+        <label for="description">Deskripsi</label>
+        <input type="text" id="description" name="description" placeholder="Contoh: Gaji, Makan siang" required />
+      </div>
+      <div class="form-item">
+        <label for="amount">Jumlah (Rp)</label>
+        <input type="number" id="amount" name="amount" placeholder="Contoh: 100000" required min="1" step="any" />
+      </div>
+      <div class="form-item">
+        <label for="type">Jenis</label>
+        <select id="type" name="type" required>
+          <option value="income">Pemasukan</option>
+          <option value="expense">Pengeluaran</option>
+        </select>
+      </div>
+      <div class="form-item">
+        <label for="date">Tanggal</label>
+        <input type="date" id="date" name="date" required />
+      </div>
+      <div class="form-item" style="flex: 1 1 100%; margin-top: 10px; margin-left: 37%;">
+        <button type="submit" aria-label="Tambah transaksi ke laporan">Tambah Transaksi</button>
+      </div>
+    </form>
+
+    <section aria-live="polite" aria-atomic="true" class="summary" id="summary">
+      <div class="summary-item">
+        <h3>Total Pemasukan</h3>
+        <p class="income" id="total-income">Rp 0</p>
+      </div>
+      <div class="summary-item">
+        <h3>Total Pengeluaran</h3>
+        <p class="expense" id="total-expense">Rp 0</p>
+      </div>
+      <div class="summary-item">
+        <h3>Saldo</h3>
+        <p class="balance" id="balance">Rp 0</p>
+      </div>
+    </section>
+
+    <section>
+      <table style="text-align: center;" aria-label="Daftar transaksi keuangan">
+        <thead>
+          <tr>
+            <th>Deskripsi</th>
+            <th>Jumlah (Rp)</th>
+            <th>Jenis</th>
+            <th>Tanggal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="transaction-list">
+          <!-- Transactions will appear here -->
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    // Utility to format number as Indonesian Rupiah currency string
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
+    }
+
+    // Get elements
+    const form = document.getElementById('transaction-form');
+    const transactionList = document.getElementById('transaction-list');
+    const totalIncomeEl = document.getElementById('total-income');
+    const totalExpenseEl = document.getElementById('total-expense');
+    const balanceEl = document.getElementById('balance');
+    const toggleButton = document.getElementById('toggle-mode');
+    const body = document.body;
+
+    const dateInput = document.getElementById('date');
+
+    // Set default date to today
+    function setDefaultDate() {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.value = today;
+      dateInput.max = today;
+    }
+    setDefaultDate();
+
+    // Load transactions from localStorage or start with empty
+    let transactions = JSON.parse(localStorage.getItem('laporanKeuangan')) || [];
+
+    // Save to localStorage
+    function saveTransactions() {
+      localStorage.setItem('laporanKeuangan', JSON.stringify(transactions));
+    }
+
+    // Calculate totals and update summary display (overall)
+    function updateSummary() {
+      const totalIncome = transactions
+        .filter(t => t.type === 'income')
+        .reduce((acc, t) => acc + t.amount, 0);
+      const totalExpense = transactions
+        .filter(t => t.type === 'expense')
+        .reduce((acc, t) => acc + t.amount, 0);
+      const balance = totalIncome - totalExpense;
+
+      totalIncomeEl.textContent = formatCurrency(totalIncome);
+      totalExpenseEl.textContent = formatCurrency(totalExpense);
+      balanceEl.textContent = formatCurrency(balance);
+    }
+
+    // Render transaction rows in table
+    function renderTransactions() {
+      transactionList.innerHTML = '';
+      if (transactions.length === 0) {
+        const emptyRow = document.createElement('tr');
+        const emptyData = document.createElement('td');
+        emptyData.colSpan = 5;
+        emptyData.style.textAlign = 'center';
+        emptyData.style.color = '#9ca3af';
+        emptyData.textContent = 'Belum ada transaksi yang dicatat.';
+        emptyRow.appendChild(emptyData);
+        transactionList.appendChild(emptyRow);
+        return;
+      }
+
+      transactions.forEach((t, index) => {
+        const tr = document.createElement('tr');
+
+        const descTd = document.createElement('td');
+        descTd.textContent = t.description;
+        tr.appendChild(descTd);
+
+        const amountTd = document.createElement('td');
+        amountTd.textContent = formatCurrency(t.amount);
+        amountTd.className = t.type === 'income' ? 'type-income' : 'type-expense';
+        tr.appendChild(amountTd);
+
+        const typeTd = document.createElement('td');
+        typeTd.textContent = t.type === 'income' ? 'Pemasukan' : 'Pengeluaran';
+        typeTd.className = t.type === 'income' ? 'type-income' : 'type-expense';
+        tr.appendChild(typeTd);
+
+        const dateTd = document.createElement('td');
+        dateTd.textContent = t.date;
+        tr.appendChild(dateTd);
+
+        const actionTd = document.createElement('td');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Hapus';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.setAttribute('aria-label', `Hapus transaksi ${t.description} pada tanggal ${t.date}`);
+        deleteBtn.addEventListener('click', () => {
+          if (confirm(`Yakin ingin menghapus transaksi "${t.description}"?`)) {
+            transactions.splice(index, 1);
+            saveTransactions();
+            renderTransactions();
+            updateSummary();
+          }
+        });
+        actionTd.appendChild(deleteBtn);
+        tr.appendChild(actionTd);
+
+        transactionList.appendChild(tr);
+      });
+    }
+
+    // Form submission handler
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const description = form.description.value.trim();
+      const amountStr = form.amount.value.trim();
+      const amount = parseFloat(amountStr);
+      const type = form.type.value;
+      const date = form.date.value;
+
+      if (!description || !amountStr || isNaN(amount) || amount <= 0 || !date) {
+        alert('Harap isi semua bidang dengan benar.');
+        return;
+      }
+
+      // Add new transaction
+      transactions.push({ description, amount, type, date });
+
+      // Save and re-render
+      saveTransactions();
+      renderTransactions();
+      updateSummary();
+
+      // Reset form but keep date defaulted to today
+      form.reset();
+      setDefaultDate();
+      form.description.focus();
+    });
+
+    // Toggle dark mode
+    toggleButton.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      toggleButton.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙'; // Ubah ikon
+    });
+
+    // Initialize display on page load
+    renderTransactions();
+    updateSummary();
+  </script>
+</body>
+</html>
